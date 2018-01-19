@@ -11,7 +11,8 @@ bar ( char * arg, char * targ, int ltarg )
 	if (len > ltarg) len = ltarg;
 
 	targ += strlen(targ);
-	for (i = 0; i <= len; i++) targ[i] = arg[i];
+	for (i = 0; i <= len; i++) 
+	  targ[i] = arg[i];
 
 	return (0);
 }
