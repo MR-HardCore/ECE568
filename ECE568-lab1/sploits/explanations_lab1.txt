@@ -1,0 +1,43 @@
+# Chenlei Hu, 1002030651, chenlei.hu@mail.utoronto.ca
+# Jiahui Cai, 1002061911, jiahui.cai@mail.utoronto.ca
+
+sploit 1:
+Basic buffer overflow, buf in lab_main got overwritten.
+Stack structure:
+<buf> <rip>
+
+sploit 2:
+More advanced buffer overflow, buf in foo got overwritten.
+Change the leftmost byte of i from \x09 directly to \x0b to jump following 3 bytes to avoid write '\x00';
+Use env to overwrite len to 283 (\x1b\x01\x00\x00) because when called by the system, the system stack looks like: <args> <env>, where env got separated by '\x00' s;
+Stack structure:
+<buf> <i> <len> <rip>
+
+sploit 3:
+Basic buffer overflow, buf in foo got overwritten.
+Nothing special to address.
+Stack structure:
+<buf> <rip>
+
+sploit 4:
+Basic buffer overflow, buf in foo got overwritten.
+Overwrite len and i to values such that overall 188 chars(the amount to reach rip) got copied to stack(here we choose len = 0x555555ff, i = 0x555555f0); 
+
+Stack structure:
+<buf> <len> <i> <rip>
+
+sploit 5:
+Format String sploit. 
+Write to return addr byte by byte with %hnn format specifier.
+Use %<number>$hnn to jump to end of buffer where the return addresses are placed.
+Use env to handle \x00 in string.
+
+sploit 6:
+Double free sploit.
+[ee28][ee2c]  ...  [ee70][ee74][ee78][ee7c][ee80][ee84]
+<    tag1  >       <  tag2   >             <   tag3   >
+
+the essence is writing tag1's address to rip with line 129 in tmalloc.c
+`((CHUNK *)(uint64_t)q->s.r)->s.l = (uint32_t)(uint64_t)p;`
+
+otherthan that, we pad 6 \x90 dummy chars in the middle of shellcode and adjust the first jmp instruction's param (+6) so that original functionality of shellcode is maintained.
