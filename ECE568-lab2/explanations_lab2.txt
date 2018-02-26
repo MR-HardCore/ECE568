@@ -1,0 +1,26 @@
+# Chenlei Hu, 1002030651, chenlei.hu@mail.utoronto.ca
+# Jiahui Cai, 1002061911, jiahui.cai@mail.utoronto.ca
+
+In this lab, we followed the tutorial on OpenSSL programming
+(http://www.linuxjournal.com/article/4822) using SSL to secure the communication
+between server and client.
+
+Communication logic
+Before:
+client open socket
+-> client send data
+-> server receive data
+-> server reply to client
+
+After:
+client initialize ssl context
+-> create ssl socket using ssl context and original socket
+-> check certificate of server
+-> send data using SSL_write
+
+-> server create ssl socket using ssl context to communicate with client
+-> check certificate of client
+-> reply to client using SSL_write
+
+If the certificate of either client or server is invalid, corresponding errors
+will be reported to either client or server.
