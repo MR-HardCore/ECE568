@@ -69,7 +69,7 @@ int main(int argc, char* argv[]) {
     // with Google Authenticator
     const char* encoded_issuer = urlEncode(issuer);
     const char* encoded_account = urlEncode(accountName);
-	
+
     uint8_t secret[10];
     parse_hex(secret_hex, secret);
     char encoded_secret[20];
