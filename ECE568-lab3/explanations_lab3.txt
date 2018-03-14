@@ -1,0 +1,12 @@
+# Chenlei Hu, 1002030651, chenlei.hu@mail.utoronto.ca
+# Jiahui Cai, 1002061911, jiahui.cai@mail.utoronto.ca
+
+generateQRcode
+- convert accountName, issuer to url format with `urlEncode`
+- convert secret_hex to base32 format by first converting hex to byte array then pass to base32_encode
+- generate final auth string with sprintf
+
+validateQRcode
+HMAC = H[(K XOR opad) || H((K XOR ipad) || M)]
+where M = 1 for HOTP
+and M = current time / 30(time period) for TOTP
