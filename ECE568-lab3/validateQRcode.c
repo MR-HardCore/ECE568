@@ -25,7 +25,8 @@ int char_to_int(char c) {
 
 void parse_hex(const char* input, uint8_t* result) {
     assert(strlen(input) == 20);
-    for (size_t i = 0; i < 20; i += 2) {
+	int i;
+    for (i = 0; i < 20; i += 2) {
         result[i / 2] = char_to_int(input[i]) * 16 + char_to_int(input[i + 1]);
     }
 }
@@ -46,7 +47,8 @@ static int validateGeneral(char* secret_hex, char* OTP_string, int protocol) {
     memset(k_opad, sizeof(k_opad), 0);
     memcpy(k_ipad, encoded_secret, 10);
     memcpy(k_opad, encoded_secret, 10);
-    for (size_t i = 0; i < 64; i++) {
+	int i;
+    for (i = 0; i < 64; i++) {
         k_ipad[i] ^= 0x36;
         k_opad[i] ^= 0x5c;
     }
@@ -59,7 +61,7 @@ static int validateGeneral(char* secret_hex, char* OTP_string, int protocol) {
         counter = (time(NULL)) / TIME_STEP;
     }
 
-    for (int i = 7; i >= 0; i--) {
+    for (i = 7; i >= 0; i--) {
 		text[i] = (uint8_t)(counter & 0xff);
 		counter >>= 8;
     }

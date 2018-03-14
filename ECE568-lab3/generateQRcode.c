@@ -20,7 +20,8 @@ int char_to_int(char c) {
 
 void parse_hex(const char* input, uint8_t* result) {
     assert(strlen(input) == 20);
-    for (size_t i = 0; i < 20; i += 2) {
+	int i;
+    for (i = 0; i < 20; i += 2) {
         result[i / 2] = char_to_int(input[i]) * 16 + char_to_int(input[i + 1]);
     }
 }
