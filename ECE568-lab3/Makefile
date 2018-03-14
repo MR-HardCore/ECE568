@@ -4,7 +4,7 @@ generateQRcode: generateQRcode.c lib/encoding.o lib/bitstream.o lib/mask.o lib/m
 	gcc generateQRcode.c lib/encoding.o lib/bitstream.o lib/mask.o lib/mmask.o lib/mqrspec.o lib/qrencode.o lib/qrinput.o lib/qrspec.o lib/rsecc.o lib/split.o -o generateQRcode
 
 validateQRcode: validateQRcode.c lib/sha1.o
-	gcc validateQRcode.c lib/sha1.o -o validateQRcode
+	gcc -D DEBUG validateQRcode.c lib/sha1.o -o validateQRcode
 
 lib/encoding.o: lib/encoding.h lib/encoding.c
 	gcc -c -std=gnu99 lib/encoding.c -o lib/encoding.o

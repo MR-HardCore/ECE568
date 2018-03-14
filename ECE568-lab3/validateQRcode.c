@@ -25,29 +25,42 @@ int char_to_int(char c) {
 
 void parse_hex(const char* input, uint8_t* result) {
     assert(strlen(input) == 20);
-	int i;
+    int i;
     for (i = 0; i < 20; i += 2) {
         result[i / 2] = char_to_int(input[i]) * 16 + char_to_int(input[i + 1]);
     }
 }
+
+#ifdef DEBUG
+void printBuff(uint8_t* buff, size_t len, const char* prompt) {
+    printf("%s", prompt);
+    {
+        int i;
+        for (i = 0; i < len; i++) printf("%02x", buff[i]);
+    }
+    printf("\n");
+}
+#endif
 
 // 1 for HOTP
 // else for TOTP
 static int validateGeneral(char* secret_hex, char* OTP_string, int protocol) {
     uint8_t encoded_secret[10];
     parse_hex(secret_hex, encoded_secret);
-
+#ifdef DEBUG
+	printBuff(encoded_secret, 10, "encoded secret is ");
+#endif
     SHA1_INFO ctx;
     uint8_t inner_sha[SHA1_DIGEST_LENGTH];
     uint8_t outer_sha[SHA1_DIGEST_LENGTH];
 
     unsigned char k_ipad[65];
     unsigned char k_opad[65];
-    memset(k_ipad, sizeof(k_ipad), 0);
-    memset(k_opad, sizeof(k_opad), 0);
+    memset(k_ipad, 0, sizeof(k_ipad));
+    memset(k_opad, 0, sizeof(k_opad));
     memcpy(k_ipad, encoded_secret, 10);
     memcpy(k_opad, encoded_secret, 10);
-	int i;
+    int i;
     for (i = 0; i < 64; i++) {
         k_ipad[i] ^= 0x36;
         k_opad[i] ^= 0x5c;
@@ -62,10 +75,12 @@ static int validateGeneral(char* secret_hex, char* OTP_string, int protocol) {
     }
 
     for (i = 7; i >= 0; i--) {
-		text[i] = (uint8_t)(counter & 0xff);
-		counter >>= 8;
+        text[i] = (uint8_t)(counter & 0xff);
+        counter >>= 8;
     }
-
+#ifdef DEBUG
+	printBuff(text, 8, "text is ");
+#endif
     sha1_init(&ctx);
     sha1_update(&ctx, k_ipad, 64);
     sha1_update(&ctx, text, 8);
@@ -74,7 +89,12 @@ static int validateGeneral(char* secret_hex, char* OTP_string, int protocol) {
     sha1_update(&ctx, k_opad, 64);
     sha1_update(&ctx, inner_sha, SHA1_DIGEST_LENGTH);
     sha1_final(&ctx, outer_sha);
-
+#ifdef DEBUG
+	printBuff(k_ipad, 64, "k_ipad is ");
+	printBuff(k_opad, 64, "k_opad is ");
+	printBuff(inner_sha, SHA1_DIGEST_LENGTH, "inner_sha is ");
+	printBuff(outer_sha, SHA1_DIGEST_LENGTH, "outer_sha is ");
+#endif
     int offset = outer_sha[SHA1_DIGEST_LENGTH - 1] & 0xf;
     int binary = ((outer_sha[offset] & 0x7f) << 24) |
                  ((outer_sha[offset + 1] & 0xff) << 16) |
