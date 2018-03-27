@@ -1,0 +1,5 @@
+101 AND ((select pin from pins where cc_number='9999888877776666') < {Test Number})
+Final answer: 5279
+
+Initialize a possible {Test Number} range,
+Use the binary search to narrow down the possible range, and finally got the number as the number must be an integer.
