@@ -3,3 +3,6 @@
 
 # ignore emacs tem file
 *~
+
+*.jar
+.extract/
